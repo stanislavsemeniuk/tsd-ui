@@ -12,9 +12,7 @@ export const DefaultErrorState: React.FC = () => {
       icon={ExclamationCircleIcon}
       variant={EmptyStateVariant.sm}
     >
-      <EmptyStateBody>
-        There was an error retrieving data. Check your connection and try again.
-      </EmptyStateBody>
+      <EmptyStateBody>There was an error retrieving data. Check your connection and try again.</EmptyStateBody>
     </EmptyState>
   );
 };

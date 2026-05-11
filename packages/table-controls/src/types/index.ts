@@ -6,12 +6,7 @@
  * app-specific modules.
  */
 
-import type {
-  IActiveSortState,
-  IFilterValues,
-  IPaginationState,
-  IPersistenceOptions,
-} from "@tsd-ui/core";
+import type { IActiveSortState, IFilterValues, IPaginationState, IPersistenceOptions } from "@tsd-ui/core";
 
 /** Full table controls configuration combining all feature states. */
 export interface ITableControlsConfig<TColumnKey extends string = string> {
