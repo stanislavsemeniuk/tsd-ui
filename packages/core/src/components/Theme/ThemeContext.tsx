@@ -57,9 +57,7 @@ export const ThemeProvider: React.FC<IThemeProviderProps> = ({ children, mode, s
 
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">(getSystemTheme);
 
-  const isDark =
-    sanitizedMode === THEME_MODES.DARK ||
-    (sanitizedMode === THEME_MODES.SYSTEM && systemTheme === "dark");
+  const isDark = sanitizedMode === THEME_MODES.DARK || (sanitizedMode === THEME_MODES.SYSTEM && systemTheme === "dark");
 
   React.useEffect(() => {
     const htmlElement = document.documentElement;

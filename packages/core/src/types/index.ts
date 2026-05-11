@@ -14,10 +14,9 @@ export type KeyWithValueType<T, V> = {
 }[keyof T];
 
 /** Disallow specific characters in a string literal type. */
-export type DisallowCharacters<
-  S extends string,
-  Chars extends string,
-> = S extends `${string}${Chars}${string}` ? never : S;
+export type DisallowCharacters<S extends string, Chars extends string> = S extends `${string}${Chars}${string}`
+  ? never
+  : S;
 
 // -- Persistence types -------------------------------------------------------
 
@@ -55,9 +54,7 @@ export interface IActiveSortState {
 export type FilterValue = string | string[];
 
 /** Map of column keys to their active filter values. */
-export type IFilterValues<TColumnKey extends string = string> = Partial<
-  Record<TColumnKey, FilterValue>
->;
+export type IFilterValues<TColumnKey extends string = string> = Partial<Record<TColumnKey, FilterValue>>;
 
 /** Pagination state. */
 export interface IPaginationState {

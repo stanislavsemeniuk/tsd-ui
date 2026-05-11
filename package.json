@@ -11,8 +11,8 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --check './packages/**/*.{ts,tsx,js,json}'",
+    "format:fix": "prettier --write './packages/**/*.{ts,tsx,js,json}'",
     "prepare": "husky"
   },
   "devDependencies": {
