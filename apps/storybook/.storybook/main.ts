@@ -8,6 +8,9 @@ const config: StorybookConfig = {
     options: {},
   },
   viteFinal: async (config) => {
+    if (process.env.STORYBOOK_BASE) {
+      config.base = process.env.STORYBOOK_BASE;
+    }
     return config;
   },
 };

@@ -2,7 +2,11 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightTypeDoc from "starlight-typedoc";
 
+const base = process.env.DOCS_BASE || "/";
+
 export default defineConfig({
+  site: process.env.DOCS_SITE || "https://tsd-ui.github.io",
+  base,
   integrations: [
     starlight({
       title: "tsd-ui",

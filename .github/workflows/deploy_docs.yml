@@ -30,11 +30,20 @@ jobs:
       - name: Build packages
         run: npm run build
 
+      - name: Resolve base path
+        id: base
+        run: echo "path=/$(echo '${{ github.repository }}' | cut -d'/' -f2)/" >> "$GITHUB_OUTPUT"
+
       - name: Build docs
         run: npm run docs:build
+        env:
+          DOCS_SITE: https://${{ github.repository_owner }}.github.io
+          DOCS_BASE: ${{ steps.base.outputs.path }}
 
       - name: Build Storybook
         run: npm run storybook:build
+        env:
+          STORYBOOK_BASE: ${{ steps.base.outputs.path }}storybook/
 
       - name: Combine outputs
         run: cp -r apps/storybook/storybook-static apps/docs/dist/storybook
