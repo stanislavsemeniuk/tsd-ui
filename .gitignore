@@ -5,6 +5,10 @@ dist/
 .DS_Store
 coverage/
 *.log
+storybook-static/
+apps/docs/src/content/docs/api/
+apps/docs/dist/
+apps/docs/.astro/
 
 .idea/
 managed_context/

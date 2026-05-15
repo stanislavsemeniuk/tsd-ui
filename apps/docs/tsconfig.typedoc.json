@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@tsd-ui/core": ["../../packages/core/src/index.ts"],
+      "@tsd-ui/forms": ["../../packages/forms/src/index.ts"],
+      "@tsd-ui/table-controls": ["../../packages/table-controls/src/index.ts"]
+    }
+  },
+  "include": [
+    "../../packages/core/src/**/*",
+    "../../packages/forms/src/**/*",
+    "../../packages/table-controls/src/**/*"
+  ],
+  "exclude": ["../../node_modules", "../../**/dist", "../../**/*.test.*"]
+}
