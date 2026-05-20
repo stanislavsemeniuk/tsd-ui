@@ -1,5 +1,24 @@
 {
   "name": "@tsd-ui/forms",
+  "description": "Form-oriented wrappers composing `@tsd-ui/core` logic with PatternFly form components.",
+  "license": "Apache-2.0",
+  "author": "The tsd-ui team",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsd-ui/tsd-ui.git",
+    "directory": "packages/forms"
+  },
+  "homepage": "https://tsd-ui.github.io/tsd-ui/",
+  "bugs": {
+    "url": "https://github.com/tsd-ui/tsd-ui/issues"
+  },
+  "keywords": [
+    "react",
+    "patternfly",
+    "typescript",
+    "ui",
+    "components"
+  ],
   "version": "0.2.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -15,20 +34,26 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "sideEffects": false,
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@tsd-ui/core": "*"
-  },
   "devDependencies": {
     "react": "^18.3.1",
+    "@tsd-ui/core": "^0.2.0",
     "@types/react": "^18.3.18"
   },
   "peerDependencies": {
-    "react": "^18.0.0"
+    "react": "^18.0.0",
+    "@tsd-ui/core": "^0.2.0"
   }
 }
