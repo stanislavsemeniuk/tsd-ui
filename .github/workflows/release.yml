@@ -70,3 +70,9 @@ jobs:
             --title "v$VERSION" \
             --generate-notes \
             $PRERELEASE_FLAG
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          npm publish --workspaces --access public

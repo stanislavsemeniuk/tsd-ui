@@ -1,5 +1,24 @@
 {
   "name": "@tsd-ui/core",
+  "description": "Shared types, components, hooks, and utilities — the foundation layer of tsd-ui.",
+  "license": "Apache-2.0",
+  "author": "The tsd-ui team",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsd-ui/tsd-ui.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://tsd-ui.github.io/tsd-ui/",
+  "bugs": {
+    "url": "https://github.com/tsd-ui/tsd-ui/issues"
+  },
+  "keywords": [
+    "react",
+    "patternfly",
+    "typescript",
+    "ui",
+    "components"
+  ],
   "version": "0.2.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -15,6 +34,13 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "sideEffects": false,
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
