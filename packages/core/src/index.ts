@@ -25,4 +25,4 @@ export function noop(): void {
 
 export * from "./components/Theme";
 export * from "./components/LoadingWrapper";
-export * from "./utils/universalComparator"
+export * from "./utils/universalComparator";
