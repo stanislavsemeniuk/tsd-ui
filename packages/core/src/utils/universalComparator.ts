@@ -1,5 +1,5 @@
 /**
- * Uses native string localCompare method with numeric option enabled.
+ * Uses native string localeCompare method with numeric option enabled.
  *
  * @param locale to be used by string compareFn
  */
