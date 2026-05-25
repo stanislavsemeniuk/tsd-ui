@@ -1,26 +1,25 @@
-/**
- * Uses native string localeCompare method with numeric option enabled.
- *
- * @param locale to be used by string compareFn
- */
-export const localeNumericCompare = (a: string, b: string, locale: string): number =>
-  a.localeCompare(b, locale ?? "en", { numeric: true });
+export interface ComparatorOptions {
+  locale?: string;
+  direction?: "asc" | "desc";
+  nulls?: "first" | "last";
+}
 
 /**
- * Compares all types by converting them to string.
- * Nullish entities are converted to empty string.
- * @see localeNumericCompare
- * @param locale to be used by string compareFn
+ * Creates a reusable comparator function with baked-in locale, direction,
+ * and null-positioning configuration. Uses `Intl.Collator` internally for
+ * optimal performance when sorting large arrays.
  */
-export const universalComparator = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  a: any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  b: any,
-  locale: string,
-) => {
-  if (typeof a === "number" && typeof b === "number") {
-    return a - b;
-  }
-  return localeNumericCompare(String(a ?? ""), String(b ?? ""), locale);
+export const createComparator = (opts: ComparatorOptions = {}) => {
+  const { locale = "en", direction = "asc", nulls = "first" } = opts;
+  const collator = new Intl.Collator(locale, { numeric: true });
+  const dir = direction === "desc" ? -1 : 1;
+
+  return (a: unknown, b: unknown): number => {
+    if (a == null && b == null) return 0;
+    if (a == null) return nulls === "first" ? -1 : 1;
+    if (b == null) return nulls === "first" ? 1 : -1;
+
+    if (typeof a === "number" && typeof b === "number") return (a - b) * dir;
+    return collator.compare(String(a), String(b)) * dir;
+  };
 };

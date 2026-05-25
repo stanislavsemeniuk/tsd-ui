@@ -1,69 +1,75 @@
 ---
-title: universalComparator
-description: Locale-aware comparator for sorting mixed-type values.
+title: createComparator
+description: Factory for locale-aware, configurable comparator functions.
 ---
 
-`universalComparator` is a general-purpose comparison function that handles numbers natively and coerces everything else to strings for locale-aware comparison. Nullish values are treated as empty strings.
+`createComparator` returns a reusable comparator function with baked-in locale, sort direction, and null-positioning. It caches an `Intl.Collator` instance internally, making it significantly faster than per-call `localeCompare` when sorting large arrays.
 
 ## Quick start
 
 ```ts
-import { universalComparator } from "@tsd-ui/core";
+import { createComparator } from "@tsd-ui/core";
 
-const sorted = items.toSorted((a, b) => universalComparator(a.name, b.name, "en"));
+const cmp = createComparator();
+items.toSorted((a, b) => cmp(a.name, b.name));
 ```
 
 ## Signature
 
 ```ts
-function universalComparator(a: any, b: any, locale: string): number;
+function createComparator(opts?: ComparatorOptions): (a: unknown, b: unknown) => number;
 ```
 
-| Param | Type | Description |
-|-------|------|-------------|
-| `a` | `any` | First value to compare. |
-| `b` | `any` | Second value to compare. |
-| `locale` | `string` | BCP 47 locale tag passed to `localeCompare`. |
+## `ComparatorOptions`
 
-**Returns** a negative number if `a < b`, positive if `a > b`, or `0` if equal.
+```ts
+interface ComparatorOptions {
+  locale?: string;            // BCP 47 tag, default "en"
+  direction?: "asc" | "desc"; // default "asc"
+  nulls?: "first" | "last";  // where nullish values sort, default "first"
+}
+```
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `locale` | `"en"` | Locale passed to `Intl.Collator` for string comparison. |
+| `direction` | `"asc"` | Sort direction. `"desc"` flips the comparison result. |
+| `nulls` | `"first"` | Whether `null`/`undefined` values sort to the beginning or end. |
 
 ## Behavior
 
-1. **Both values are numbers** → arithmetic subtraction (`a - b`).
-2. **Otherwise** → both values are coerced to `String(value ?? "")` and compared via `localeNumericCompare`.
+1. **Both values `null`/`undefined`** → `0`.
+2. **One value nullish** → positioned according to `nulls` option.
+3. **Both values are numbers** → arithmetic subtraction (`a - b`), multiplied by direction.
+4. **Otherwise** → both coerced to string and compared via `Intl.Collator` with `{ numeric: true }`.
 
-Nullish (`null` / `undefined`) values become `""`, so they sort to the beginning when compared against non-empty strings.
+Numeric collation means `"item2"` sorts before `"item10"` (by numeric value, not character code).
 
 ## Examples
 
 ```ts
-import { universalComparator } from "@tsd-ui/core";
+import { createComparator } from "@tsd-ui/core";
 
-// Numeric comparison
-universalComparator(10, 2, "en"); // 8 (positive → 10 > 2)
+// Default: ascending, English, nulls first
+const cmp = createComparator();
+["file10", "file2", "file1"].toSorted(cmp);
+// → ["file1", "file2", "file10"]
 
-// String comparison with numeric awareness
-universalComparator("item2", "item10", "en"); // negative (2 < 10)
+// Descending with nulls last
+const desc = createComparator({ direction: "desc", nulls: "last" });
+[3, 1, null, 2].toSorted(desc);
+// → [3, 2, 1, null]
 
-// Nullish handling
-universalComparator(null, "hello", "en"); // negative ("" < "hello")
+// Czech locale
+const cs = createComparator({ locale: "cs" });
+["č", "c", "d"].toSorted(cs);
+// → ["c", "č", "d"]
+
+// Sorting objects by a field
+const byName = createComparator({ locale: "en" });
+users.toSorted((a, b) => byName(a.name, b.name));
 ```
 
-## `localeNumericCompare`
+## Performance
 
-Lower-level helper used internally by `universalComparator`. Wraps `String.prototype.localeCompare` with the `numeric` option enabled.
-
-```ts
-import { localeNumericCompare } from "@tsd-ui/core";
-
-localeNumericCompare("file2", "file10", "en"); // negative (2 < 10)
-localeNumericCompare("abc", "abd", "en"); // negative
-```
-
-### Signature
-
-```ts
-function localeNumericCompare(a: string, b: string, locale: string): number;
-```
-
-The `numeric: true` option ensures that embedded numbers are compared by their numeric value rather than character-by-character (`"2" < "10"` instead of `"2" > "1"`).
+`String.prototype.localeCompare` constructs an internal collator on every call — for N items that means N·log(N) collator constructions. `createComparator` builds the `Intl.Collator` once and reuses it across all comparisons, which is significantly faster for arrays with hundreds or thousands of elements.

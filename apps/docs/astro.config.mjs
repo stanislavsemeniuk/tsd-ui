@@ -36,7 +36,7 @@ export default defineConfig({
             },
             {
               label: "Utils",
-              items: [{ label: "universalComparator", slug: "core/utils/universal-comparator" }],
+              items: [{ label: "createComparator", slug: "core/utils/universal-comparator" }],
             },
           ],
         },
